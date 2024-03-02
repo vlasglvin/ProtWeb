@@ -1,45 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="/static/style.css">
 </head>
+
 <body>
-   {% include 'menu.html' %}
+    {% include 'menu.html' %}
 
     <main class="container">
-        <h2> {{ title }}</h2>
-    <h3> hello from HTML</h3>
-    <h4> hello from HTML</h4>
-    <h5> hello from HTML</h5>
-    <h6> hello from HTML</h6>
-    <p> {{planes}}</p>
-    <p>Greetings to our empty site.....</p>
-    <p>Greetings to our empty site.....</p>
-    <img class="img-fluid" src="/static/img/nasa-Tquhp9Kqkzk-unsplash (1).jpg" alt="">
-   
-    <a class="btn btn-danger my-btn" href="https://www.wikipedia.org/" target="_blank"><b>Open <i>wikipedia</i></b></a>
-    <p>
-        <!-- <a href="https://bongo.cat/" target="_blank">
-            <img width="150" src="https://basepaws.com/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2F7hqiona4456t%2F3Ks1FXaeWtNa8yHErHzQfA%2F592ee709464f16de0bae5d62f642142a%2Fbengal_cat__1_.jpg&w=640&q=75" alt="cat">
-        </a> -->
-        
-    </p>
+        <h2 class="text-center my-4"> {{ title }}</h2>
+
+        <img class="img-fluid" src="/static/img/nasa-Tquhp9Kqkzk-unsplash (1).jpg" alt="">
+        <div class="planes-post">
+            
+            {% for plane in planes %}
+                <div class="card m-3" style="width: 18rem;">
+                    <img src="{{ url_for('static', filename='img/' + plane['image']) }}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title"> {{plane['name']}}</h5>
+                        <p class="card-text"> {{plane['specifications']}}
+                            </p>
+                        <a href="#" class="btn btn-warning">Open</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
     </main>
 
     <footer class="container">
-        <p>&copy; Vlasik 2024</p> 
-        <p><a href="https://www.flaticon.com/free-icons/jet" title="jet icons">Jet icons created by max.icons - Flaticon</a></p>
+        <p>&copy; Vlasik 2024</p>
+        <p><a href="https://www.flaticon.com/free-icons/jet" title="jet icons">Jet icons created by max.icons -
+                Flaticon</a></p>
     </footer>
-   
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>
