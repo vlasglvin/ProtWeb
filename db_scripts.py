@@ -24,3 +24,12 @@ class PlanesDB:
         data = [dict(row) for row in data]
         return data
     
+    def get_plane(self, name):
+        self.open()
+        self.cursor.execute('''SELECT * FROM planes WHERE name=? ''', [name])
+        data = self.cursor.fetchall()
+        self.close()
+        data = [dict(row) for row in data]
+        
+        return data[0]
+    

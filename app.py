@@ -12,7 +12,9 @@ def main_page():
 
     return render_template("index.html", title = title, planes = planes)
 
-
-
+@app.route("/plane/<name>")
+def plane_page(name):
+    title = "Plane " + name
+    plane = db.get_plane(name)
     
-
+    return render_template("plane.html", title = title, plane = plane)
