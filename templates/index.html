@@ -1,25 +1,27 @@
+{% extends 'base.html' %}
 
-{% extends 'base.html' %}        
-       
 {% block content %}
-            
 
-        <h2 class="text-center my-4"> {{ title }}</h2>
 
-        <img class="img-fluid" src="/static/img/nasa-Tquhp9Kqkzk-unsplash (1).jpg" alt="">
-        <div class="planes-post">
-            
-            {% for plane in planes %}
-                <div class="card m-3" style="width: 18rem;">
-                    <img src="{{ url_for('static', filename='img/' + plane['image']) }}" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title"> {{plane['name']}}</h5>
-                        <p class="card-text"> {{plane['specifications']}}
-                            </p>
-                        <a href="{{ url_for('plane_page', name=plane['name']) }}" class="btn btn-warning">Open</a>
-                    </div>
-                </div>
-            {% endfor %}
+<h2 class="text-center my-4"> {{ title }}</h2>
+
+<img class="img-fluid" src="/static/img/nasa-Tquhp9Kqkzk-unsplash (1).jpg" alt="">
+<div class=" row planes-post row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
+
+    {% for plane in planes %}
+    <div class="col">
+        <div class="card m-3" style="max-width: 25rem;">
+            <img src="{{ url_for('static', filename='img/' + plane['image']) }}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title"> {{plane['name']}}</h5>
+                <p class="card-text"> {{plane['specifications']}}
+                </p>
+                <a href="{{ url_for('plane_page', name=plane['name']) }}" class="btn btn-warning">Open</a>
+            </div>
         </div>
-        
+    </div>
+
+    {% endfor %}
+</div>
+
 {% endblock content %}
