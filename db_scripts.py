@@ -33,3 +33,10 @@ class PlanesDB:
         
         return data[0]
     
+    def get_all_categories(self):
+        self.open()
+        self.cursor.execute('''SELECT * FROM categories ''')
+        data = self.cursor.fetchall()
+        self.close()
+        data = [dict(row) for row in data]
+        return data
