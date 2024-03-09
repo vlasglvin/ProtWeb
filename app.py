@@ -27,3 +27,14 @@ def plane_page(name):
                            title = title,
                            plane = plane,
                            plane_types=plane_types)
+
+@app.route("/type/<int:category_id>")
+def planes_by_type(category_id):
+    plane_types = db.get_all_categories()
+    planes = db.get_planes_by_category(category_id)
+    title = db.get_category(category_id)
+
+    return render_template("category_planes.html",
+                            title = title,
+                            planes = planes,
+                            plane_types=plane_types)

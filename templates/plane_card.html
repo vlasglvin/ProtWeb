@@ -1,0 +1,11 @@
+<div class="col">
+    <div class="card m-3" style="max-width: 25rem;">
+        <img src="{{ url_for('static', filename='img/' + plane['image']) }}" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title"> {{plane['name']}}</h5>
+            <p class="card-text"> {{plane['specifications']}}
+            </p>
+            <a href="{{ url_for('plane_page', name=plane['name']) }}" class="btn btn-warning">Open</a>
+        </div>
+    </div>
+</div>
