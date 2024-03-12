@@ -9,7 +9,7 @@ db = PlanesDB("planes.db")
 def main_page():
     title = "PlanePedia - your source about planes"
     plane_types = db.get_all_categories()
-    planes = db.get_all_planes()
+    planes = db.get_all_planes_by_categories()
 
     return render_template("index.html",
                             title = title,
@@ -34,6 +34,17 @@ def planes_by_type(category_id):
     planes = db.get_planes_by_category(category_id)
     title = db.get_category(category_id)
 
+    return render_template("category_planes.html",
+                            title = title,
+                            planes = planes,
+                            plane_types=plane_types)
+
+@app.route("/search")
+def search():
+    plane_types = db.get_all_categories()
+    planes = []
+    title = "Search"
+    
     return render_template("category_planes.html",
                             title = title,
                             planes = planes,

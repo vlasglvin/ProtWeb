@@ -58,12 +58,11 @@ class PlanesDB:
 
         return data[0]['title']
     
-    # def get_all_planes_by_categories(self):
-    #     self.open()
-    #     self.cursor.execute('''SELECT * 
-    #     FROM categories JOIN planes ON categories.id = planes.category_id ORDER BY category_name''')
-    #     data = self.cursor.fetchall()
-    #     self.close()
-    #     data = [dict(row) for row in data]
-    #     return data
-    
+    def get_all_planes_by_categories(self):
+        planes = {}
+        categories = self.get_all_categories()
+        for category in categories:
+            category_planes = self.get_planes_by_category(category['id'])
+            planes[category['title']] = category_planes
+
+        return planes
