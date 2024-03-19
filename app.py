@@ -63,5 +63,5 @@ def articles():
 
     return render_template("plane_history.html",
                             title = title,
-                            planes = articles,
+                            articles = articles,
                             plane_types=plane_types)

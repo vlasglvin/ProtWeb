@@ -11,11 +11,18 @@ h1{
 
 
 footer{
-    background: rgb(34, 17, 223);
-    font-size: 30px;
+    background: rgb(5, 54, 94);
+    color:rgb(255, 255, 255);
+    /* font-size: 20px; */
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    border: 3px dashed  rgb(0, 0, 0);    
-    border-radius: 15px;
+    border: 3px   rgb(0, 0, 0);    
+    border-radius: 5px;
+    padding: 5px;
+
+
+}
+.attribution{
+    font-size: 10px;
 }
 
 .open-btn{
