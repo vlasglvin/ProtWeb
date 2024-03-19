@@ -14,8 +14,7 @@ footer{
     background: rgb(5, 54, 94);
     color:rgb(255, 255, 255);
     /* font-size: 20px; */
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    border: 3px   rgb(0, 0, 0);    
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; 
     border-radius: 5px;
     padding: 5px;
 
