@@ -1,7 +1,7 @@
 <header style="background: rgb(14, 86, 130)">
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-          <a class="navbar-brand" href="#">
+          <a class="navbar-brand" href="{{ url_for('main_page',) }}">
             <img src="/static/img/air-force.png" alt="" width="30" class="me-2">
             PlanePedia</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -13,7 +13,7 @@
                 <a class="nav-link active" aria-current="page" href="{{ url_for('main_page',) }}">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Plane history</a>
+                <a class="nav-link" href="{{ url_for('articles',) }}">Plane history</a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -26,9 +26,6 @@
                   
 
                 </ul>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link disabled" aria-disabled="true">Disabled</a>
               </li>
             </ul>
             <form action="{{ url_for('search',) }}" class="d-flex" role="search">

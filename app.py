@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template,  request
 
 from db_scripts import PlanesDB
 
@@ -45,7 +45,23 @@ def search():
     planes = []
     title = "Search"
     
+    if request.method == 'GET':
+        query = request.args.get("query")
+        planes = db.search_planes(query)
+
+
     return render_template("category_planes.html",
                             title = title,
                             planes = planes,
+                            plane_types=plane_types)
+
+@app.route("/articles")
+def articles():
+    title = "History of planes"
+    plane_types = db.get_all_categories()
+    articles = db.get_all_articles()
+
+    return render_template("plane_history.html",
+                            title = title,
+                            planes = articles,
                             plane_types=plane_types)

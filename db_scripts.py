@@ -66,3 +66,21 @@ class PlanesDB:
             planes[category['title']] = category_planes
 
         return planes
+    
+    def search_planes(self, query):
+        self.open()
+        query = query + '%'
+        self.cursor.execute('''SELECT * FROM planes WHERE (name LIKE ? OR country LIKE ? OR wing_shape LIKE ? OR producedstart LIKE ? OR description LIKE ?)''', 
+                            [query , query, query, query, query])
+        data = self.cursor.fetchall()
+        self.close()
+        data = [dict(row) for row in data]
+        return data
+    
+    def get_all_articles(self):
+        self.open()
+        self.cursor.execute('''SELECT * FROM articles ''')
+        data = self.cursor.fetchall()
+        self.close()
+        data = [dict(row) for row in data]
+        return data
