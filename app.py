@@ -65,3 +65,8 @@ def articles():
                             title = title,
                             articles = articles,
                             plane_types=plane_types)
+
+
+@app.route("/admin/login")
+def login():
+    return render_template("login.html", title = "Login")
