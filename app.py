@@ -1,10 +1,13 @@
 from flask import Flask, render_template,  request
-
+from dotenv import load_dotenv
 from db_scripts import PlanesDB
+import os
+
+load_dotenv()
 
 app = Flask(__name__)
 db = PlanesDB("planes.db")
-
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 @app.route("/")
 def main_page():
     title = "PlanePedia - your source about planes"
@@ -67,6 +70,13 @@ def articles():
                             plane_types=plane_types)
 
 
-@app.route("/admin/login")
+@app.route("/admin/login", methods=["GET", "POST"])
 def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = db.check_login_data(username, password)
+        if user:
+            print("welcome admin")
+
     return render_template("login.html", title = "Login")

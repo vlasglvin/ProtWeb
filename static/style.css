@@ -45,3 +45,9 @@ footer{
     text-align: center;
     margin: 20px;
 } */
+
+
+.login-form{
+    max-width: 500px;
+    width: 100%;
+}
