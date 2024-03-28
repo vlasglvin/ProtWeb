@@ -89,8 +89,9 @@ class PlanesDB:
         self.open()
         self.cursor.execute('''SELECT * FROM users WHERE username=? AND password=? ''',
                             [username, password])
-        data = self.cursor.fetchone()
+        data = self.cursor.fetchall()
         if data:
-            return data
+            data = [dict(row) for row in data]
+            return data[0]
         else:
             return None
