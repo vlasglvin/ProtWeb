@@ -95,3 +95,14 @@ class PlanesDB:
             return data[0]
         else:
             return None
+        
+    def get_user(self, user_id):
+        self.open()
+        self.cursor.execute('''SELECT * FROM users WHERE id=?''',
+                            [user_id])
+        data = self.cursor.fetchall()
+        if data:
+            data = [dict(row) for row in data]
+            return data[0]
+        else:
+            return None

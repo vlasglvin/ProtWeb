@@ -1,4 +1,4 @@
-from flask import Flask, render_template,  request, redirect
+from flask import Flask, render_template,  request, redirect, url_for, flash
 from dotenv import load_dotenv
 
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
@@ -16,16 +16,18 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 class User(UserMixin):
-    def __init__(self, user_id):
+    def __init__(self, user_data):
         super().__init__()
-        self.id = str(user_id)
+        self.id = str(user_data['id'])
+        self.name = user_data['name']
+        self.username = user_data['username']
+        self.role = user_data['role']
 
-    def get_id(self):
-        return self.id
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.get_id(str(user_id))
+    user_data = db.get_user(user_id)
+    return User(user_data)
 
 
 @app.route("/")
@@ -97,12 +99,22 @@ def login():
         password = request.form['password']
         user_db = db.check_login_data(username, password)
         if user_db:
-            user = User(user_db['id'])
+            user = User(user_db)
             login_user(user)
-            return redirect('admin_page')
+            return redirect(url_for('admin_page'))
+        
+        else:
+            flash("Incorrect username or password")
 
     return render_template("login.html", title = "Login")
 
+@login_required
 @app.route("/admin", methods=["GET", "POST"])
 def admin_page():
-    return render_template("admin_page.html", title = "Administartor")    
+    return render_template("admin_page.html", title = "Administartor")
+
+
+@app.route("/admin/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('main_page'))
