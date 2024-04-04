@@ -118,3 +118,17 @@ def admin_page():
 def logout():
     logout_user()
     return redirect(url_for('main_page'))
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        username = request.form['username']
+        password = request.form['password']
+        password_repeat = request.form['password_repeat']
+        
+        
+
+
+    return render_template("register.html", title = "Create new account")
