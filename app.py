@@ -128,7 +128,21 @@ def register():
         password = request.form['password']
         password_repeat = request.form['password_repeat']
         
+        is_valid =  name.strip() != "" and email.strip() != "" and username.strip() != "" and password.strip() != "" and password_repeat.strip() != ""
         
+        if is_valid:    
+            if db.is_username_exist(username):
+                flash("this username is already taken")
+
+            elif db.is_email_exist(email):
+                flash("this email is already taken")
+            elif password!= password_repeat:
+                flash("Passwords must match")
+            else:
+                db.create_user(name,username, email, password)
+                flash("User created")
+        else:
+            flash("Please fill in all fields")
 
 
     return render_template("register.html", title = "Create new account")

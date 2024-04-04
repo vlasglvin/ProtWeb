@@ -106,3 +106,30 @@ class PlanesDB:
             return data[0]
         else:
             return None
+        
+    def is_username_exist(self, username):
+        self.open()
+        self.cursor.execute('''SELECT * FROM users WHERE username=?''',
+                            [username])
+        data = self.cursor.fetchone()
+        self.close()
+        return data
+    
+    def is_email_exist(self, email):
+        self.open()
+        self.cursor.execute('''SELECT * FROM users WHERE email=?''',
+                            [email])
+        data = self.cursor.fetchone()
+        self.close()
+        return data
+
+    def create_user(self, name, username, email, password):
+        self.open()
+        self.cursor.execute('''
+            INSERT INTO users (name, username, email, password)
+            VALUES (?,?,?,?)''',
+             [ name, username, email, password] )
+        self.conn.commit()
+        self.close()
+
+        
