@@ -1,8 +1,8 @@
 from flask import Flask, render_template,  request, redirect, url_for, flash
 from dotenv import load_dotenv
 
-from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
-
+from flask_login import LoginManager, UserMixin, current_user, login_user, logout_user, login_required
+from werkzeug.security import generate_password_hash, check_password_hash
 from db_scripts import PlanesDB
 import os
 load_dotenv()
@@ -14,6 +14,7 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = 'login'
 
 class User(UserMixin):
     def __init__(self, user_data):
@@ -92,25 +93,35 @@ def articles():
                             plane_types=plane_types)
 
 
-@app.route("/admin/login", methods=["GET", "POST"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('main_page'))
+    
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        user_db = db.check_login_data(username, password)
-        if user_db:
+        user_db = db.check_login_data(username)
+        if user_db and check_password_hash(user_db['password'], password):
+            
             user = User(user_db)
             login_user(user)
-            return redirect(url_for('admin_page'))
+            if user.role == "admin":
+                return redirect(url_for('admin_page'))
+
+            return redirect(url_for('main_page'))
         
         else:
             flash("Incorrect username or password")
 
     return render_template("login.html", title = "Login")
 
-@login_required
+
 @app.route("/admin", methods=["GET", "POST"])
+@login_required
 def admin_page():
+    if current_user.role != "admin":
+                return redirect(url_for('main_page'))
     return render_template("admin_page.html", title = "Administartor")
 
 
@@ -121,6 +132,9 @@ def logout():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('main_page'))
+    
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
@@ -138,9 +152,15 @@ def register():
                 flash("this email is already taken")
             elif password!= password_repeat:
                 flash("Passwords must match")
+            elif len(password) < 8:
+                flash("Password has to be longer than 8 characters")
+               
             else:
-                db.create_user(name,username, email, password)
+                password_hash = generate_password_hash(password)
+                db.create_user(name,username, email, password_hash)
                 flash("User created")
+                return redirect(url_for('login'))
+
         else:
             flash("Please fill in all fields")
 

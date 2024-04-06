@@ -85,10 +85,10 @@ class PlanesDB:
         data = [dict(row) for row in data]
         return data
     
-    def check_login_data(self, username, password):
+    def check_login_data(self, username):
         self.open()
-        self.cursor.execute('''SELECT * FROM users WHERE username=? AND password=? ''',
-                            [username, password])
+        self.cursor.execute('''SELECT * FROM users WHERE username=?''',
+                            [username])
         data = self.cursor.fetchall()
         if data:
             data = [dict(row) for row in data]

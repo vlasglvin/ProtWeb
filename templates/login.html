@@ -1,4 +1,4 @@
-{% extends 'admin-base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
 <h1 class="my-4"> Login</h1>
@@ -15,6 +15,7 @@
       <input type="checkbox" class="form-check-input" id="exampleCheck1">
       <label class="form-check-label" for="exampleCheck1">remember me</label>
     </div>
+    {% include 'alerts.html' %}
     <button type="submit" class="btn btn-primary">Login</button>
   </form>
 {% endblock %}
