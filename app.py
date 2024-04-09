@@ -124,6 +124,16 @@ def admin_page():
                 return redirect(url_for('main_page'))
     return render_template("admin_page.html", title = "Administartor")
 
+@app.route("/admin/new_plane", methods=["GET", "POST"])
+@login_required
+def add_plane_page():
+    if current_user.role != "admin":
+                return redirect(url_for('main_page'))
+    
+    plane_types = db.get_all_categories()
+    
+    return render_template("add_plane.html", title = "Add new plane", plane_types = plane_types)
+
 
 @app.route("/admin/logout")
 def logout():
