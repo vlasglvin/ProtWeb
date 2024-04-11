@@ -132,4 +132,19 @@ class PlanesDB:
         self.conn.commit()
         self.close()
 
+    def create_plane(self, name, category_id, image, country,
+                      quantity, produsedstart, produsedend, cost, 
+                      wingshape, specifications, description, history):
+        self.open()
+        self.cursor.execute('''
+            INSERT INTO planes (name, category_id, image, country,
+                      quantity, produsedstart, produsedend, cost, 
+                      wingshape, specifications, description, history)
+            VALUES (?,?,?,?)''',
+             [name, category_id, image, country,
+                      quantity, produsedstart, produsedend, cost, 
+                      wingshape, specifications, description, history] )
+        self.conn.commit()
+        self.close()
+
         

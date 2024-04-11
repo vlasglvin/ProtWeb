@@ -131,6 +131,20 @@ def add_plane_page():
                 return redirect(url_for('main_page'))
     
     plane_types = db.get_all_categories()
+    if request.method == 'POST':
+        name = request.form['name']
+        category_id = request.form['category']
+        image = request.form['image']
+        country = request.form['country']
+        quantity = request.form['quantity']
+        prodused_start = request.form['prodused_start']
+        prodused_end = request.form['prodused_end']
+        cost = request.form['cost']
+        wing_shape = request.form['wing_shape']
+        specifications = request.form['specifications']
+        description = request.form['description']
+        history = request.form['history']
+
     
     return render_template("add_plane.html", title = "Add new plane", plane_types = plane_types)
 

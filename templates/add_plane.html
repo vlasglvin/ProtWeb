@@ -3,7 +3,7 @@
 {% block content %}
 <h1 class="my-4"> Add new plane</h1>
 
-<form action="" method="post">
+<form action="" method="post" enctype="multipart/form-data">
     <div class="mb-3">
         <label for="nameInput" class="form-label">Enter plane name</label>
         <input required name="name" type="text" class="form-control" id="nameInput">
@@ -34,19 +34,52 @@
       </div>
 
       
-      <div class="d-flex gap-3"><div class="mb-3">
+      <div class="d-flex gap-3"><div class="mb-3 w-100">
         <label for="producedStartInput" class="form-label">Prodused start</label>
         <input required name="prodused_start" type="number" class="form-control" id="producedStartinput">
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3 w-100">
         <label for="producedEndInput" class="form-label">Prodused End</label>
-        <input required name="prodused_end" type="number" min="1800" max="2100" class="form-control" id="producedEndinput">
-      </div></div>
+        <input name="prodused_end" type="number" min="1800" max="2100" class="form-control" id="producedEndinput">
+      </div>
+
+    </div>
       
+    <div class="form-check mb-3">
+      <input name="present_days" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+      <label class="form-check-label" for="flexCheckDefault">
+        Present day
+      </label>
+    </div>
+
+    <div class="mb-3">
+      <label for="CostInput" class="form-label">Cost</label>
+      <input required name="cost" type="number" min="0" class="form-control" id="CostInput">
+    </div>
     
+    <div class="mb-3">
+      <label for="wingshapeInput" class="form-label">Wing shape</label>
+      <input required name="wing_shape" type="text" class="form-control" id="wingshapeInput">
+    </div>
     
-      
+    <div class="mb-3">
+      <label for="specificationsInput" class="form-label">Specifications</label>
+      <input name="specifications" type="text" class="form-control" id="specificationsInput">
+    </div>
+
+    <div class="mb-3">
+      <label for="descriptionTextarea" class="form-label">Description</label>
+      <textarea name="description" class="form-control" id="descriptionTextarea" rows="3"></textarea>
+    </div>
+
+    <div class="mb-5">
+      <label for="historyTextarea" class="form-label">History</label>
+      <textarea name="history" class="form-control" id="historyTextarea" rows="5"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-warning mb-5">Add plane</button>
+
       
 </form>
 
