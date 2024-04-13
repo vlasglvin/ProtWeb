@@ -7,6 +7,9 @@ from db_scripts import PlanesDB
 import os
 load_dotenv()
 
+PATH = os.path.dirname(__file__) + os.sep
+IMG_PATH = PATH + "static" + os.sep + "img" + os.sep
+
 app = Flask(__name__)
 db = PlanesDB("planes.db")
 
@@ -134,17 +137,32 @@ def add_plane_page():
     if request.method == 'POST':
         name = request.form['name']
         category_id = request.form['category']
-        image = request.form['image']
+        image = request.files['image'] 
         country = request.form['country']
         quantity = request.form['quantity']
         prodused_start = request.form['prodused_start']
         prodused_end = request.form['prodused_end']
+        # present_days = request.form['present_days']
         cost = request.form['cost']
         wing_shape = request.form['wing_shape']
         specifications = request.form['specifications']
         description = request.form['description']
         history = request.form['history']
 
+        is_valid = True
+        for field in [name, category_id, country, quantity, prodused_start, cost, wing_shape, description, history]:
+            if field.strip() == "":
+                is_valid = False
+                break
+        if is_valid:
+            if image:
+                image.save(IMG_PATH + image.filename )
+            db.create_plane(name, int(category_id), image.filename, country, quantity,
+                             prodused_start, prodused_end, cost, wing_shape, specifications, description, history)
+
+
+        else:
+            flash("Please fill in all fields")
     
     return render_template("add_plane.html", title = "Add new plane", plane_types = plane_types)
 

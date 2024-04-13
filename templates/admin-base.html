@@ -52,12 +52,6 @@
     </header>
 
     <main class="container">
-        {% for category, message in get_flashed_messages(True) %}
-         <div class="my-3 alert alert-warning" role="alert">
-           {{ message }}
-         </div>
-        {% endfor %}
-
 
         {% block content %}
             

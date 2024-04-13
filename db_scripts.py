@@ -138,9 +138,9 @@ class PlanesDB:
         self.open()
         self.cursor.execute('''
             INSERT INTO planes (name, category_id, image, country,
-                      quantity, produsedstart, produsedend, cost, 
-                      wingshape, specifications, description, history)
-            VALUES (?,?,?,?)''',
+                      quantity, producedstart, producedend, cost, 
+                      wing_shape, specifications, description, history)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?)''',
              [name, category_id, image, country,
                       quantity, produsedstart, produsedend, cost, 
                       wingshape, specifications, description, history] )
