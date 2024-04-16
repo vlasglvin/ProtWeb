@@ -1,6 +1,6 @@
 from flask import Flask, render_template,  request, redirect, url_for, flash
 from dotenv import load_dotenv
-
+from datetime import timedelta
 from flask_login import LoginManager, UserMixin, current_user, login_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from db_scripts import PlanesDB
@@ -14,10 +14,11 @@ app = Flask(__name__)
 db = PlanesDB("planes.db")
 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-
+app.config['SESSION_REMEMBER_ME_DURATION'] = timedelta(days=31)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+login_manager.login_message_category = "alert-warning"
 
 class User(UserMixin):
     def __init__(self, user_data):
@@ -104,18 +105,22 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        if 'remember_me' in request.form:
+            remember = True
+        else:
+            remember = False
         user_db = db.check_login_data(username)
         if user_db and check_password_hash(user_db['password'], password):
             
             user = User(user_db)
-            login_user(user)
+            login_user(user, remember=remember)
             if user.role == "admin":
                 return redirect(url_for('admin_page'))
 
             return redirect(url_for('main_page'))
         
         else:
-            flash("Incorrect username or password")
+            flash("Incorrect username or password", category="alert-warning")
 
     return render_template("login.html", title = "Login")
 
@@ -142,7 +147,6 @@ def add_plane_page():
         quantity = request.form['quantity']
         prodused_start = request.form['prodused_start']
         prodused_end = request.form['prodused_end']
-        # present_days = request.form['present_days']
         cost = request.form['cost']
         wing_shape = request.form['wing_shape']
         specifications = request.form['specifications']
@@ -154,15 +158,23 @@ def add_plane_page():
             if field.strip() == "":
                 is_valid = False
                 break
-        if is_valid:
-            if image:
-                image.save(IMG_PATH + image.filename )
-            db.create_plane(name, int(category_id), image.filename, country, quantity,
-                             prodused_start, prodused_end, cost, wing_shape, specifications, description, history)
+        
+        try:
+            if is_valid:
+                if request.form.get('present_days') == 'present_days':
+                    prodused_end = "present-day"
+                if image:
+                    image.save(IMG_PATH + image.filename )
+                db.create_plane(name, int(category_id), image.filename, country, quantity,
+                                prodused_start, prodused_end, cost, wing_shape, specifications, description, history)
 
+                flash("Plane added succesfully.", category="alert-primary")
+            else:
+                flash("Please fill in all fields", category="alert-danger")
+        except:
+            flash("Error. Try again!", category="alert-danger")
 
-        else:
-            flash("Please fill in all fields")
+        
     
     return render_template("add_plane.html", title = "Add new plane", plane_types = plane_types)
 
@@ -188,23 +200,23 @@ def register():
         
         if is_valid:    
             if db.is_username_exist(username):
-                flash("this username is already taken")
+                flash("this username is already taken", category="alert-warning")
 
             elif db.is_email_exist(email):
-                flash("this email is already taken")
+                flash("this email is already taken", category="alert-warning")
             elif password!= password_repeat:
-                flash("Passwords must match")
+                flash("Passwords must match", category="alert-warning")
             elif len(password) < 8:
-                flash("Password has to be longer than 8 characters")
+                flash("Password has to be longer than 8 characters", category="alert-warning")
                
             else:
                 password_hash = generate_password_hash(password)
                 db.create_user(name,username, email, password_hash)
-                flash("User created")
+                flash("User created", category="alert-primary")
                 return redirect(url_for('login'))
 
         else:
-            flash("Please fill in all fields")
+            flash("Please fill in all fields", category="alert-warning")
 
 
     return render_template("register.html", title = "Create new account")
