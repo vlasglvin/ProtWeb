@@ -147,4 +147,10 @@ class PlanesDB:
         self.conn.commit()
         self.close()
 
+    def delete_plane(self, plane_id):
+        self.open()
+        self.cursor.execute(''' DELETE FROM planes WHERE id=?, [plane_id] ''')
+        self.conn.commit()
+        self.close()
+
         

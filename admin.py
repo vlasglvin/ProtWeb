@@ -15,7 +15,30 @@ admin = Blueprint('admin', __name__,
 def admin_page():
     if current_user.role != "admin":
                 return redirect(url_for('main_page'))
-    return render_template("admin_page.html", title = "Administartor")
+    
+    title = "PlanePedia - Administrator"
+    plane_types = db.get_all_categories()
+    planes = db.get_all_planes_by_categories()
+
+    return render_template("admin_page.html",
+                            title = title,
+                            planes = planes,
+                            plane_types=plane_types)
+
+@admin.route("/admin/plane/<int:plane_id>/delete", methods=["GET", "POST"])
+@login_required
+def plane_delete_page(plane_id):
+    if current_user.role != "admin":
+                return redirect(url_for('main_page'))
+    
+    title = "PlanePedia - Administrator"
+    plane_types = db.get_all_categories()
+    
+
+    return render_template("admin_page.html",
+                            title = title,
+                            plane_types=plane_types)
+
 
 @admin.route("/admin/new_plane", methods=["GET", "POST"])
 @login_required

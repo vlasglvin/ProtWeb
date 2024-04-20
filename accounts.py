@@ -86,7 +86,7 @@ def register():
                 password_hash = generate_password_hash(password)
                 db.create_user(name,username, email, password_hash)
                 flash("User created", category="alert-primary")
-                return redirect(url_for('login'))
+                return redirect(url_for('accounts.login'))
 
         else:
             flash("Please fill in all fields", category="alert-warning")
