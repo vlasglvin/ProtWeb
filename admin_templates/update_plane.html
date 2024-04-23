@@ -1,0 +1,92 @@
+{% extends 'admin-base.html' %}
+
+{% block content %}
+<h1 class="my-4"> Edit plane {{plane.name}}</h1>
+
+{% include 'alerts.html' %}
+
+<form action="" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="nameInput" class="form-label">Enter plane name</label>
+        <input value="{{plane.name}}" required name="name" type="text" class="form-control" id="nameInput">
+      </div>
+      <div class="mb-3">
+        <select name="category" class="form-select" aria-label="Default select example">
+            {% for type in plane_types %}
+            <option value="{{type.id}}">{{type.title}}</option>
+            {% endfor %}
+            
+         </select>
+
+      </div>
+
+      <div class="mb-3">
+        <label for="formFile" class="form-label">Add plane image</label>
+        <input required name="image" class="form-control" type="file" id="formFile">
+      </div>
+
+      <div class="mb-3">
+        <label for="countryInput" class="form-label">Country of origin</label>
+        <input value="{{plane.country}}" required name="country" type="text" class="form-control" id="countryInput">
+      </div>
+
+      <div class="mb-3">
+        <label for="quantityInput" class="form-label">Quantity of planes produced</label>
+        <input value="{{plane.quantity}}" required name="quantity" type="text" class="form-control" id="quantityinput">
+      </div>
+
+      
+      <div class="d-flex gap-3"><div class="mb-3 w-100">
+        <label for="producedStartInput" class="form-label">Prodused start</label>
+        <input value="{{plane.producedstart}}" required name="prodused_start" type="number" class="form-control" id="producedStartinput">
+      </div>
+
+      <div class="mb-3 w-100">
+        <label for="producedEndInput" class="form-label">Prodused End</label>
+        <input value="{{plane.produsedend}}" name="prodused_end" type="number" min="1800" max="2100" class="form-control" id="producedEndinput">
+      </div>
+
+    </div>
+      
+    <div class="form-check mb-3">
+      <input name="present_days" class="form-check-input" type="checkbox" value="present_days" id="flexCheckDefault">
+      <label class="form-check-label" for="flexCheckDefault">
+        Present day
+      </label>
+    </div>
+
+    <div class="mb-3">
+      <label for="CostInput" class="form-label">Cost</label>
+      <input value="{{plane.cost}}" required name="cost", class="form-control" id="CostInput">
+    </div>
+    
+    <div class="mb-3">
+      <label for="wingshapeInput" class="form-label">Wing shape</label>
+      <input value="{{plane.wing_shape}}" required name="wing_shape" type="text" class="form-control" id="wingshapeInput">
+    </div>
+    
+    <div class="mb-3">
+      <label for="specificationsInput" class="form-label">Specifications</label>
+      <input value="{{plane.specifications}}" name="specifications" type="text" class="form-control" id="specificationsInput">
+    </div>
+
+    <div class="mb-3">
+      <label for="descriptionTextarea" class="form-label">Description</label>
+      <textarea required name="description" class="form-control" id="descriptionTextarea" rows="3">
+        {{plane.description}}
+      </textarea>
+    </div>
+
+    <div class="mb-5">
+      <label for="historyTextarea" class="form-label">History</label>
+      <textarea required name="history" class="form-control" id="historyTextarea" rows="5">
+        {{plane.history}}
+      </textarea>
+    </div>
+
+    <button type="submit" class="btn btn-warning mb-5">Add plane</button>
+
+      
+</form>
+
+{% endblock %}

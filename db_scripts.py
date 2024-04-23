@@ -32,7 +32,16 @@ class PlanesDB:
         data = [dict(row) for row in data]
         
         return data[0]
-    
+
+    def get_plane_by_id(self, plane_id):
+        self.open()
+        self.cursor.execute('''SELECT * FROM planes WHERE id=? ''', [plane_id])
+        data = self.cursor.fetchall()
+        self.close()
+        data = [dict(row) for row in data]
+        
+        return data[0]
+
     def get_all_categories(self):
         self.open()
         self.cursor.execute('''SELECT * FROM categories ''')
@@ -149,7 +158,7 @@ class PlanesDB:
 
     def delete_plane(self, plane_id):
         self.open()
-        self.cursor.execute(''' DELETE FROM planes WHERE id=?, [plane_id] ''')
+        self.cursor.execute(''' DELETE FROM planes WHERE id=?''', [plane_id])
         self.conn.commit()
         self.close()
 
