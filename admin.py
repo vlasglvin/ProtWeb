@@ -114,6 +114,8 @@ def update_plane_page(plane_id):
         description = request.form['description']
         history = request.form['history']
 
+        image_name = plane['image']
+
         is_valid = True
         for field in [name, category_id, country, quantity, prodused_start, cost, wing_shape, description, history]:
             if field.strip() == "":
@@ -126,10 +128,11 @@ def update_plane_page(plane_id):
                     prodused_end = "present-day"
                 if image:
                     image.save(IMG_PATH + image.filename )
-                db.create_plane(name, int(category_id), image.filename, country, quantity,
+                    image_name = image.filename
+                db.update_plane(plane['id'], name, int(category_id), image_name, country, quantity,
                                 prodused_start, prodused_end, cost, wing_shape, specifications, description, history)
 
-                flash("Plane added succesfully.", category="alert-primary")
+                flash("Plane saved succesfully.", category="alert-primary")
             else:
                 flash("Please fill in all fields", category="alert-danger")
         except:
@@ -138,5 +141,114 @@ def update_plane_page(plane_id):
         
     
     return render_template("update_plane.html", title = "Edit plane", plane=plane, plane_types = plane_types)
+
+
+
+@admin.route("/admin/articles", methods=["GET", "POST"])
+@login_required
+def admin_articles_page():
+    if current_user.role != "admin":
+                return redirect(url_for('main_page'))
+    
+    title = "Plane History - Administrator"
+    plane_types = db.get_all_categories()
+    articles = db.get_all_articles()
+
+    return render_template("admin_plane_history.html",
+                            title = title,
+                            articles = articles,
+                            plane_types=plane_types)
+
+
+@admin.route("/admin/new_article", methods=["GET", "POST"])
+@login_required
+def add_article_page():
+    if current_user.role != "admin":
+                return redirect(url_for('main_page'))
+    
+    plane_types = db.get_all_categories()
+    if request.method == 'POST':
+        title = request.form['title']
+        text = request.form['text']
+        image = request.files['image'] 
+        author = request.form['author']
+
+        is_valid = True
+        for field in [title, text, author]:
+            if field.strip() == "":
+                is_valid = False
+                break
+        
+        try:
+            if is_valid:
+                if image:
+                     image.save(IMG_PATH + image.filename )
+                db.create_article(title, text, image.filename, author)
+
+                flash("Article added succesfully.", category="alert-primary")
+            else:
+                flash("Please fill in all fields", category="alert-danger")
+        except:
+            flash("Error. Try again!", category="alert-danger")
+
+        
+    
+    return render_template("add_article.html", title = "Add new article", plane_types = plane_types)
+
+
+@admin.route("/admin/article/<int:article_id>/delete", methods=["GET", "POST"])
+@login_required
+def article_delete_page(article_id):
+    if current_user.role != "admin":
+                return redirect(url_for('main_page'))
+    
+    title = "Delete article"
+    plane_types = db.get_all_categories()
+    if request.method == "POST":
+          db.delete_article(article_id)
+          return redirect(url_for("admin.admin_articles_page"))
+    
+
+    return render_template("delete_confirmation.html",
+                            title = title,
+                            plane_types=plane_types)
+
+
+@admin.route("/admin/article/<int:article_id>/update", methods=["GET", "POST"])
+@login_required
+def update_article_page(article_id):
+    if current_user.role != "admin":
+                return redirect(url_for('main_page'))
+    
+    plane_types = db.get_all_categories()
+    article = db.get_article_by_id(article_id)
+
+    if request.method == 'POST':
+        title = request.form['title']
+        text = request.form['text']
+        image = request.files['image'] 
+        author = request.form['author']
+
+        is_valid = True
+        for field in [title, text, author]:
+            if field.strip() == "":
+                is_valid = False
+                break
+        
+        try:
+            if is_valid:
+                if image:
+                     image.save(IMG_PATH + image.filename )
+                db.create_article(title, text, image.filename, author)
+
+                flash("Article added succesfully.", category="alert-primary")
+            else:
+                flash("Please fill in all fields", category="alert-danger")
+        except:
+            flash("Error. Try again!", category="alert-danger")
+
+        
+    
+    return render_template("update_article.html", title = "Update article", article=article, plane_types = plane_types)
 
 

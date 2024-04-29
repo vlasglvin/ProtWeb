@@ -162,4 +162,44 @@ class PlanesDB:
         self.conn.commit()
         self.close()
 
+    def update_plane(self, plane_id, name, category_id, image, country,
+                      quantity, producedstart, producedend, cost, 
+                      wingshape, specifications, description, history):
+        self.open()
+        self.cursor.execute('''UPDATE planes
+                            SET name = ?,category_id=?, image = ?, 
+                            country=?, quantity=?,producedstart=?,
+                            producedend=?,cost=?,wing_shape=?,
+                            specifications=?,description=?,history=?
+                    WHERE id = ?''',[
+                        name, category_id, image, country,
+                      quantity, producedstart, producedend, cost, 
+                      wingshape, specifications, description, history, plane_id
+                    ])
+        self.conn.commit()
+        self.close()
+
+
+    def create_article(self, title, text, image, author):
+        self.open()
+        self.cursor.execute('''
+            INSERT INTO articles (title, text, image, author)
+            VALUES (?,?,?,?)''',
+             [title, text, image, author] )
+        self.conn.commit()
+        self.close()
+
+    def delete_article(self, article_id):
+        self.open()
+        self.cursor.execute(''' DELETE FROM articles WHERE id=?''', [article_id])
+        self.conn.commit()
+        self.close()
+
+    def get_article_by_id(self, article_id):
+        self.open()
+        self.cursor.execute('''SELECT * FROM articles WHERE id=? ''', [article_id])
+        data = self.cursor.fetchall()
+        self.close()
+        data = [dict(row) for row in data]
         
+        return data[0]
