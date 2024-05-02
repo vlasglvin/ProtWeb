@@ -19,11 +19,13 @@ def admin_page():
     title = "PlanePedia - Administrator"
     plane_types = db.get_all_categories()
     planes = db.get_all_planes_by_categories()
+    suggested_planes = db.get_suggested_planes()
 
     return render_template("admin_page.html",
                             title = title,
                             planes = planes,
-                            plane_types=plane_types)
+                            plane_types=plane_types,
+                            suggested_planes = suggested_planes)
 
 @admin.route("/admin/plane/<int:plane_id>/delete", methods=["GET", "POST"])
 @login_required

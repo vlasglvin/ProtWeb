@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, render_template,  request, redirect, url_for, flash
+from flask import Flask, Blueprint, abort, render_template,  request, redirect, url_for, flash
 from dotenv import load_dotenv
 from datetime import timedelta
 from flask_login import LoginManager, UserMixin, current_user, login_user, logout_user, login_required
@@ -43,11 +43,13 @@ def plane_page(name):
     title = "Plane " + name
     plane = db.get_plane(name)
     plane_types = db.get_all_categories()
-
-    return render_template("plane.html", 
-                           title = title,
-                           plane = plane,
-                           plane_types=plane_types)
+    if plane:
+        return render_template("plane.html", 
+                            title = title,
+                            plane = plane,
+                            plane_types=plane_types)
+    else:
+        return abort(404)
 
 @app.route("/type/<int:category_id>")
 def planes_by_type(category_id):

@@ -3,6 +3,15 @@
 {% block content %}
 <h1 class="my-4"> Hello, Administrator</h1>
 
+{% if suggested_planes %}
+    <h3>Suggested by users</h3>
+    {% for plane in suggested_planes %}
+    {% include 'admin_plane_card.html' %}
+    {% endfor %}
+{% endif %}
+
+
+
 {% for category in planes %}
 {% if planes[category] | length %}
     

@@ -26,29 +26,38 @@ class PlanesDB:
     
     def get_suggested_planes(self):
         self.open()
-        self.cursor.execute('''SELECT * FROM planes WHERE visibility="visible"''')
+        self.cursor.execute('''SELECT * FROM planes WHERE visibility="hidden"''')
         data = self.cursor.fetchall()
         self.close()
-        data = [dict(row) for row in data]
-        return data
+        if data and len(data) > 0:
+            data = [dict(row) for row in data]
+            return data[0]
+        else:
+            return None
     
     def get_plane(self, name):
         self.open()
-        self.cursor.execute('''SELECT * FROM planes WHERE name=? ''', [name])
-        data = self.cursor.fetchall()
+        self.cursor.execute('''SELECT * FROM planes WHERE name=? AND visibility="visible" ''', [name])
+        data = self.cursor.fetchone()
         self.close()
-        data = [dict(row) for row in data]
+        if data is not None:
+            data = dict(data)
+            print(data)
+            return data
+        else:
+            return None
         
-        return data[0]
 
     def get_plane_by_id(self, plane_id):
         self.open()
         self.cursor.execute('''SELECT * FROM planes WHERE id=? ''', [plane_id])
         data = self.cursor.fetchall()
         self.close()
-        data = [dict(row) for row in data]
-        
-        return data[0]
+        if data:
+            data = [dict(row) for row in data]
+            return data[0]
+        else:
+            return None
 
     def get_all_categories(self):
         self.open()
