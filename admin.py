@@ -228,6 +228,7 @@ def update_article_page(article_id):
         text = request.form['text']
         image = request.files['image'] 
         author = request.form['author']
+        image_name = article['image']
 
         is_valid = True
         for field in [title, text, author]:
@@ -239,9 +240,11 @@ def update_article_page(article_id):
             if is_valid:
                 if image:
                      image.save(IMG_PATH + image.filename )
-                db.create_article(title, text, image.filename, author)
+                     image_name = image.filename
 
-                flash("Article added succesfully.", category="alert-primary")
+                db.update_article(article_id, title, text, image_name, author)
+
+                flash("Article updated succesfully.", category="alert-primary")
             else:
                 flash("Please fill in all fields", category="alert-danger")
         except:

@@ -18,7 +18,15 @@ class PlanesDB:
 
     def get_all_planes(self):
         self.open()
-        self.cursor.execute('''SELECT * FROM planes ''')
+        self.cursor.execute('''SELECT * FROM planes WHERE visibility="visible"''')
+        data = self.cursor.fetchall()
+        self.close()
+        data = [dict(row) for row in data]
+        return data
+    
+    def get_suggested_planes(self):
+        self.open()
+        self.cursor.execute('''SELECT * FROM planes WHERE visibility="visible"''')
         data = self.cursor.fetchall()
         self.close()
         data = [dict(row) for row in data]
@@ -52,7 +60,7 @@ class PlanesDB:
     
     def get_planes_by_category(self, category_id):
         self.open()
-        self.cursor.execute('''SELECT * FROM planes WHERE category_id=?''', [category_id])
+        self.cursor.execute('''SELECT * FROM planes WHERE category_id=? AND visibility="visible"''', [category_id])
         data = self.cursor.fetchall()
         self.close()
         data = [dict(row) for row in data]
@@ -143,16 +151,16 @@ class PlanesDB:
 
     def create_plane(self, name, category_id, image, country,
                       quantity, produsedstart, produsedend, cost, 
-                      wingshape, specifications, description, history):
+                      wingshape, specifications, description, history, visibility="visible"):
         self.open()
         self.cursor.execute('''
             INSERT INTO planes (name, category_id, image, country,
                       quantity, producedstart, producedend, cost, 
-                      wing_shape, specifications, description, history)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?)''',
+                      wing_shape, specifications, description, history, visibility)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)''',
              [name, category_id, image, country,
                       quantity, produsedstart, produsedend, cost, 
-                      wingshape, specifications, description, history] )
+                      wingshape, specifications, description, history, visibility] )
         self.conn.commit()
         self.close()
 
@@ -203,3 +211,14 @@ class PlanesDB:
         data = [dict(row) for row in data]
         
         return data[0]
+    
+    def update_article(self, article_id, title, text, image, author):
+        self.open()
+        self.cursor.execute('''UPDATE articles
+                            SET title = ?,text=?, image = ?, 
+                            author=?
+                        WHERE id = ?''',[
+                            title, text, image, author, article_id
+                    ])
+        self.conn.commit()
+        self.close()
