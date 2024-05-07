@@ -130,6 +130,6 @@ def suggest_plane():
             flash("Error. Try again!", category="alert-danger")
 
     
-    return render_template("add_plane.html", title = "Add new plane", plane_types = plane_types)
+    return render_template("suggest_plane.html", title = "Suggest new plane", plane_types = plane_types)
 
 

@@ -31,7 +31,7 @@ class PlanesDB:
         self.close()
         if data and len(data) > 0:
             data = [dict(row) for row in data]
-            return data[0]
+            return data
         else:
             return None
     
@@ -181,17 +181,17 @@ class PlanesDB:
 
     def update_plane(self, plane_id, name, category_id, image, country,
                       quantity, producedstart, producedend, cost, 
-                      wingshape, specifications, description, history):
+                      wingshape, specifications, description, history, visibility):
         self.open()
         self.cursor.execute('''UPDATE planes
                             SET name = ?,category_id=?, image = ?, 
                             country=?, quantity=?,producedstart=?,
                             producedend=?,cost=?,wing_shape=?,
-                            specifications=?,description=?,history=?
+                            specifications=?,description=?,history=?, visibility=?
                     WHERE id = ?''',[
                         name, category_id, image, country,
                       quantity, producedstart, producedend, cost, 
-                      wingshape, specifications, description, history, plane_id
+                      wingshape, specifications, description, history, visibility, plane_id
                     ])
         self.conn.commit()
         self.close()

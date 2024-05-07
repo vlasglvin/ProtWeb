@@ -20,12 +20,14 @@ def admin_page():
     plane_types = db.get_all_categories()
     planes = db.get_all_planes_by_categories()
     suggested_planes = db.get_suggested_planes()
+    print(suggested_planes)
 
     return render_template("admin_page.html",
                             title = title,
                             planes = planes,
                             plane_types=plane_types,
                             suggested_planes = suggested_planes)
+
 
 @admin.route("/admin/plane/<int:plane_id>/delete", methods=["GET", "POST"])
 @login_required
@@ -115,6 +117,7 @@ def update_plane_page(plane_id):
         specifications = request.form['specifications']
         description = request.form['description']
         history = request.form['history']
+        visibility = request.form["visibility"]
 
         image_name = plane['image']
 
@@ -132,7 +135,7 @@ def update_plane_page(plane_id):
                     image.save(IMG_PATH + image.filename )
                     image_name = image.filename
                 db.update_plane(plane['id'], name, int(category_id), image_name, country, quantity,
-                                prodused_start, prodused_end, cost, wing_shape, specifications, description, history)
+                                prodused_start, prodused_end, cost, wing_shape, specifications, description, history, visibility)
 
                 flash("Plane saved succesfully.", category="alert-primary")
             else:

@@ -96,8 +96,29 @@
         {{plane.history}}
       </textarea>
     </div>
+    {% block extra_tags %}
+    <div class="mb-5">
+      <label for="visibilitySelect" class="form-label">Visibility</label>
+        <select name="visibility" class="form-select" aria-label="Default select example" id="visibilitySelect"
+        <option selected>Open this select menu</option>
+        <option
+        {% if plane.visibility == 'hidden' %}
+            selected          
+        {% endif %}
+        value="hidden">Hidden</option>
+        <option
+        {% if plane.visibility == 'visible' %}
+            selected          
+        {% endif %}
+        value="visible">Visible</option>
+      </select>
 
-    <button type="submit" class="btn btn-warning mb-5">Save</button>
+    </div>
+
+    
+        <button type="submit" class="btn btn-warning mb-5">Save</button>
+    {% endblock extra_tags %}
+    
 
       
 </form>
