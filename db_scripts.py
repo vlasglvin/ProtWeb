@@ -1,3 +1,4 @@
+from functools import wraps
 import sqlite3
 
 
@@ -16,24 +17,32 @@ class PlanesDB:
         self.cursor.close()
         self.conn.close()
 
-    def get_all_planes(self):
-        self.open()
-        self.cursor.execute('''SELECT * FROM planes WHERE visibility="visible"''')
-        data = self.cursor.fetchall()
-        self.close()
-        data = [dict(row) for row in data]
-        return data
-    
-    def get_suggested_planes(self):
-        self.open()
-        self.cursor.execute('''SELECT * FROM planes WHERE visibility="hidden"''')
-        data = self.cursor.fetchall()
-        self.close()
-        if data and len(data) > 0:
-            data = [dict(row) for row in data]
+    def get_query(func):
+        @wraps(func)
+        def wrapper(self, *args, **kwargs):
+            self.open()
+            data = func(self, *args, **kwargs)
+            self.close()
+            if type(data) == list:
+                data = [dict(row) for row in data]
+            elif data is not None:
+                data = dict(data)
+            else:
+                data = None
             return data
-        else:
-            return None
+        
+        return wrapper
+
+
+    @get_query
+    def get_all_planes(self):
+        self.cursor.execute('''SELECT * FROM planes WHERE visibility="visible"''')
+        return self.cursor.fetchall()   
+
+    @get_query
+    def get_suggested_planes(self):
+        self.cursor.execute('''SELECT * FROM planes WHERE visibility="hidden"''')
+        return self.cursor.fetchall()
     
     def get_plane(self, name):
         self.open()
@@ -58,15 +67,11 @@ class PlanesDB:
             return data[0]
         else:
             return None
-
+    @get_query
     def get_all_categories(self):
-        self.open()
         self.cursor.execute('''SELECT * FROM categories ''')
-        data = self.cursor.fetchall()
-        self.close()
-        data = [dict(row) for row in data]
-        return data
-    
+        return self.cursor.fetchall()
+     
     def get_planes_by_category(self, category_id):
         self.open()
         self.cursor.execute('''SELECT * FROM planes WHERE category_id=? AND visibility="visible"''', [category_id])
@@ -191,7 +196,7 @@ class PlanesDB:
                     WHERE id = ?''',[
                         name, category_id, image, country,
                       quantity, producedstart, producedend, cost, 
-                      wingshape, specifications, description, history, visibility, plane_id
+                      wingshape, specifications, description, history, visibility,   plane_id
                     ])
         self.conn.commit()
         self.close()

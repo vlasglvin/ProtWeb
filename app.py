@@ -18,7 +18,7 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['SESSION_REMEMBER_ME_DURATION'] = timedelta(days=31)
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'accounts.login'
 login_manager.login_message_category = "alert-warning"
 
 from admin import admin
