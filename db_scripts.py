@@ -135,17 +135,13 @@ class PlanesDB:
         
 
     @post_query
-    def create_plane(self, name, category_id, image, country,
-                      quantity, produsedstart, produsedend, cost, 
-                      wingshape, specifications, description, history, visibility="visible"):
+    def create_plane(self, *params):
         self.cursor.execute('''
             INSERT INTO planes (name, category_id, image, country,
                       quantity, producedstart, producedend, cost, 
                       wing_shape, specifications, description, history, visibility)
             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)''',
-             [name, category_id, image, country,
-                      quantity, produsedstart, produsedend, cost, 
-                      wingshape, specifications, description, history, visibility] )
+             params )
 
 
     @post_query
