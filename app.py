@@ -55,7 +55,7 @@ def plane_page(name):
 def planes_by_type(category_id):
     plane_types = db.get_all_categories()
     planes = db.get_planes_by_category(category_id)
-    title = db.get_category(category_id)
+    title = db.get_category(category_id)['title']
 
     return render_template("category_planes.html",
                             title = title,
