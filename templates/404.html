@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<h2 class="text-center my-4"> ERROR 404. Page not found</h2>
+
+<div class="d-flex justify-content-center">
+    <a href="{{ url_for('main_page') }}" class="btn btn-primary btn-lg mb-4 text-center">Back to Home Page</a>
+</div>
+
+{% endblock content %}

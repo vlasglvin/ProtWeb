@@ -81,7 +81,7 @@ def add_plane_page():
                 if image:
                     image.save(IMG_PATH + image.filename )
                 db.create_plane(name, int(category_id), image.filename, country, quantity,
-                                prodused_start, prodused_end, cost, wing_shape, specifications, description, history)
+                                prodused_start, prodused_end, cost, wing_shape, specifications, description, history, "visible")
 
                 flash("Plane added succesfully.", category="alert-primary")
             else:
@@ -134,8 +134,8 @@ def update_plane_page(plane_id):
                 if image:
                     image.save(IMG_PATH + image.filename )
                     image_name = image.filename
-                db.update_plane(plane['id'], name, int(category_id), image_name, country, quantity,
-                                prodused_start, prodused_end, cost, wing_shape, specifications, description, history, visibility)
+                db.update_plane(name, int(category_id), image_name, country, quantity,
+                                prodused_start, prodused_end, cost, wing_shape, specifications, description, history, visibility, plane['id'])
 
                 flash("Plane saved succesfully.", category="alert-primary")
             else:

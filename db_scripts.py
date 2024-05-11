@@ -149,20 +149,14 @@ class PlanesDB:
         self.cursor.execute(''' DELETE FROM planes WHERE id=?''', [plane_id])
     
     @post_query
-    def update_plane(self, plane_id, name, category_id, image, country,
-                      quantity, producedstart, producedend, cost, 
-                      wingshape, specifications, description, history, visibility):
+    def update_plane(self, *params):
        
         self.cursor.execute('''UPDATE planes
                             SET name = ?,category_id=?, image = ?, 
                             country=?, quantity=?,producedstart=?,
                             producedend=?,cost=?,wing_shape=?,
                             specifications=?,description=?,history=?, visibility=?
-                    WHERE id = ?''',[
-                        name, category_id, image, country,
-                      quantity, producedstart, producedend, cost, 
-                      wingshape, specifications, description, history, visibility,   plane_id
-                    ])
+                    WHERE id = ?''', params)
        
 
     @post_query
