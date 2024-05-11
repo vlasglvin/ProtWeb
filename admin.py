@@ -74,20 +74,20 @@ def add_plane_page():
                 is_valid = False
                 break
         
-        #try:
-        if is_valid:
-            if request.form.get('present_days') == 'present_days':
-                prodused_end = "present-day"
-            if image:
-                image.save(IMG_PATH + image.filename )
-            db.create_plane(name, int(category_id), image.filename, country, quantity,
-                            prodused_start, prodused_end, cost, wing_shape, specifications, description, history)
+        try:
+            if is_valid:
+                if request.form.get('present_days') == 'present_days':
+                    prodused_end = "present-day"
+                if image:
+                    image.save(IMG_PATH + image.filename )
+                db.create_plane(name, int(category_id), image.filename, country, quantity,
+                                prodused_start, prodused_end, cost, wing_shape, specifications, description, history)
 
-            flash("Plane added succesfully.", category="alert-primary")
-        else:
-            flash("Please fill in all fields", category="alert-danger")
-        #except:
-            #flash("Error. Try again!", category="alert-danger")
+                flash("Plane added succesfully.", category="alert-primary")
+            else:
+                flash("Please fill in all fields", category="alert-danger")
+        except:
+            flash("Error. Try again!", category="alert-danger")
 
         
     
