@@ -27,6 +27,24 @@
 
                 </ul>
               </li>
+
+              {% if current_user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('suggest_plane',) }}">Suggest a plane</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('accounts.logout',) }}">Logout</a>
+              </li>
+              {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('accounts.login',) }}">Login</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('accounts.register',) }}">Create account</a>
+              </li>
+              {% endif %}
+
+              
             </ul>
             <form action="{{ url_for('search',) }}" class="d-flex" role="search">
               <input required name="query" class="form-control me-2" type="search" placeholder="Search something" aria-label="Search">

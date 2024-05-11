@@ -1,0 +1,28 @@
+{% extends 'admin-base.html' %}
+
+{% block content %}
+<h1 class="my-4"> Hello, Administrator</h1>
+
+{% if suggested_planes %}
+    <h3>Suggested by users</h3>
+    {% for plane in suggested_planes %}
+    {% include 'suggested_plane_card.html' %}
+    {% endfor %}
+{% endif %}
+
+
+
+{% for category in planes %}
+{% if planes[category] | length %}
+    
+<h3 class="mt-4"> {{category}} </h3>
+<div class=" row planes-post row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
+    {% for plane in planes[category] %}
+    {% include 'admin_plane_card.html' %}
+    {% endfor %}
+</div>
+{% endif %}
+{% endfor %}
+
+
+{% endblock %}

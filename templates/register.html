@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="my-4"> {{ title }}</h1>
+<form class="login-form mb-3" method="post" action="">
+  <div class="mb-3">
+    <label for="nameInput" class="form-label">Enter your name</label>
+    <input required name="name" type="text" class="form-control" id="nameInput">
+  </div>
+  <div class="mb-3">
+    <label for="inputEmail" class="form-label">Enter your email</label>
+    <input required name="email" type="email" class="form-control" id="inputEmail">
+  </div>
+  <div class="mb-3">
+      <label for="inputUsername" class="form-label">Enter username</label>
+      <input required name="username" type="text" class="form-control" id="inputUsername" aria-describedby="emailHelp">
+    </div>
+    <div class="mb-3">
+      <label for="inputpassword" class="form-label">Enter password</label>
+      <input required name="password" type="password" class="form-control" id="inputpassword">
+    </div>
+    <div class="mb-3">
+      <label for="inputpassword2" class="form-label">Repeat password</label>
+      <input required name="password_repeat" type="password" class="form-control" id="inputpassword2">
+    </div>
+    {% include 'alerts.html' %}
+    <button type="submit" class="btn btn-primary">Create account</button>
+  </form>
+{% endblock %}

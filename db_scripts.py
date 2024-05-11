@@ -1,3 +1,4 @@
+from functools import wraps
 import sqlite3
 
 
@@ -16,47 +17,70 @@ class PlanesDB:
         self.cursor.close()
         self.conn.close()
 
-    def get_all_planes(self):
-        self.open()
-        self.cursor.execute('''SELECT * FROM planes ''')
-        data = self.cursor.fetchall()
-        self.close()
-        data = [dict(row) for row in data]
-        return data
-    
-    def get_plane(self, name):
-        self.open()
-        self.cursor.execute('''SELECT * FROM planes WHERE name=? ''', [name])
-        data = self.cursor.fetchall()
-        self.close()
-        data = [dict(row) for row in data]
+    def get_query(func):
+        @wraps(func)
+        def wrapper(self, *args, **kwargs):
+            self.open()
+            data = func(self, *args, **kwargs)
+            self.close()
+            if type(data) == list:
+                data = [dict(row) for row in data]
+            elif data is not None:
+                data = dict(data)
+            else:
+                data = None
+            return data
         
-        return data[0]
-    
-    def get_all_categories(self):
-        self.open()
-        self.cursor.execute('''SELECT * FROM categories ''')
-        data = self.cursor.fetchall()
-        self.close()
-        data = [dict(row) for row in data]
-        return data
-    
-    def get_planes_by_category(self, category_id):
-        self.open()
-        self.cursor.execute('''SELECT * FROM planes WHERE category_id=?''', [category_id])
-        data = self.cursor.fetchall()
-        self.close()
-        data = [dict(row) for row in data]
-        return data
-    
-    def get_category(self, category_id):
-        self.open()
-        self.cursor.execute('''SELECT * FROM categories WHERE id=? ''', [category_id])
-        data = self.cursor.fetchall()
-        self.close()
-        data = [dict(row) for row in data]
+        return wrapper
 
-        return data[0]['title']
+    def post_query(func):
+        @wraps(func)
+        def wrapper(self, *args, **kwargs):
+            self.open()
+            func(self, *args, **kwargs)
+            self.conn.commit()
+            self.close()
+
+        return wrapper
+
+
+    @get_query
+    def get_all_planes(self):
+        self.cursor.execute('''SELECT * FROM planes WHERE visibility="visible"''')
+        return self.cursor.fetchall()   
+
+    @get_query
+    def get_suggested_planes(self):
+        self.cursor.execute('''SELECT * FROM planes WHERE visibility="hidden"''')
+        return self.cursor.fetchall()
+    
+    @get_query
+    def get_plane(self, name):
+        self.cursor.execute('''SELECT * FROM planes WHERE name=? AND visibility="visible" ''', [name])
+        return self.cursor.fetchone()
+
+        
+    @get_query
+    def get_plane_by_id(self, plane_id):
+        
+        self.cursor.execute('''SELECT * FROM planes WHERE id=? ''', [plane_id])
+        return self.cursor.fetchone()
+        
+    @get_query
+    def get_all_categories(self):
+        self.cursor.execute('''SELECT * FROM categories ''')
+        return self.cursor.fetchall()
+     
+    @get_query
+    def get_planes_by_category(self, category_id):
+        self.cursor.execute('''SELECT * FROM planes WHERE category_id=? AND visibility="visible"''', [category_id])
+        return self.cursor.fetchall()
+        
+    @get_query   
+    def get_category(self, category_id):
+       
+        self.cursor.execute('''SELECT * FROM categories WHERE id=? ''', [category_id])
+        return self.cursor.fetchone()
     
     def get_all_planes_by_categories(self):
         planes = {}
@@ -66,21 +90,97 @@ class PlanesDB:
             planes[category['title']] = category_planes
 
         return planes
-    
+    @get_query
     def search_planes(self, query):
-        self.open()
         query = query + '%'
         self.cursor.execute('''SELECT * FROM planes WHERE (name LIKE ? OR country LIKE ? OR wing_shape LIKE ? OR producedstart LIKE ? OR description LIKE ?)''', 
                             [query , query, query, query, query])
-        data = self.cursor.fetchall()
-        self.close()
-        data = [dict(row) for row in data]
-        return data
-    
+        return self.cursor.fetchall()
+
+    @get_query
     def get_all_articles(self):
-        self.open()
         self.cursor.execute('''SELECT * FROM articles ''')
-        data = self.cursor.fetchall()
-        self.close()
-        data = [dict(row) for row in data]
-        return data
+        return self.cursor.fetchall()
+     
+    @get_query
+    def check_login_data(self, username):
+        self.cursor.execute('''SELECT * FROM users WHERE username=?''',
+                            [username])
+        return self.cursor.fetchone()
+
+    @get_query    
+    def get_user(self, user_id):
+        self.cursor.execute('''SELECT * FROM users WHERE id=?''',
+                            [user_id])
+        return self.cursor.fetchone()
+       
+    @get_query    
+    def is_username_exist(self, username):
+        self.cursor.execute('''SELECT * FROM users WHERE username=?''',
+                            [username])
+        return self.cursor.fetchone()
+
+    @get_query     
+    def is_email_exist(self, email):
+        self.cursor.execute('''SELECT * FROM users WHERE email=?''',
+                            [email])
+        return self.cursor.fetchone()
+        
+    @post_query
+    def create_user(self, name, username, email, password):
+        self.cursor.execute('''
+            INSERT INTO users (name, username, email, password)
+            VALUES (?,?,?,?)''',
+             [ name, username, email, password] )
+        
+
+    @post_query
+    def create_plane(self, *params):
+        self.cursor.execute('''
+            INSERT INTO planes (name, category_id, image, country,
+                      quantity, producedstart, producedend, cost, 
+                      wing_shape, specifications, description, history, visibility)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)''',
+             params )
+
+
+    @post_query
+    def delete_plane(self, plane_id):
+        self.cursor.execute(''' DELETE FROM planes WHERE id=?''', [plane_id])
+    
+    @post_query
+    def update_plane(self, *params):
+       
+        self.cursor.execute('''UPDATE planes
+                            SET name = ?,category_id=?, image = ?, 
+                            country=?, quantity=?,producedstart=?,
+                            producedend=?,cost=?,wing_shape=?,
+                            specifications=?,description=?,history=?, visibility=?
+                    WHERE id = ?''', params)
+       
+
+    @post_query
+    def create_article(self, title, text, image, author):
+        self.cursor.execute('''
+            INSERT INTO articles (title, text, image, author)
+            VALUES (?,?,?,?)''',
+             [title, text, image, author] )
+
+    @post_query
+    def delete_article(self, article_id):
+        self.cursor.execute(''' DELETE FROM articles WHERE id=?''', [article_id])
+
+    @get_query   
+    def get_article_by_id(self, article_id):
+        self.cursor.execute('''SELECT * FROM articles WHERE id=? ''', [article_id])
+        return self.cursor.fetchone()
+  
+    
+    @post_query
+    def update_article(self, article_id, title, text, image, author):
+        self.cursor.execute('''UPDATE articles
+                            SET title = ?,text=?, image = ?, 
+                            author=?
+                        WHERE id = ?''',[
+                            title, text, image, author, article_id
+                    ])

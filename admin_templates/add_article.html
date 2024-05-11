@@ -1,0 +1,34 @@
+{% extends 'admin-base.html' %}
+
+{% block content %}
+<h1 class="my-4"> Add new article</h1>
+
+{% include 'alerts.html' %}
+
+<form action="" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="nameInput" class="form-label">Article title</label>
+        <input required name="title" type="text" class="form-control" id="nameInput">
+      </div>
+
+      <div class="mb-3">
+        <label for="formFile" class="form-label">Add article image</label>
+        <input required name="image" class="form-control" type="file" id="formFile">
+      </div>
+
+    <div class="mb-3">
+      <label for="descriptionTextarea" class="form-label">Text</label>
+      <textarea required name="text" class="form-control" id="descriptionTextarea" rows="3"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label for="nameInput" class="form-label">  Source </label>
+        <input required name="author" type="text" class="form-control" id="nameInput">
+    </div>
+
+    <button type="submit" class="btn btn-warning mb-5">Add article</button>
+    
+      
+</form>
+
+{% endblock %}

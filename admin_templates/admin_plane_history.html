@@ -1,0 +1,28 @@
+{% extends 'admin-base.html' %}
+
+{% block content %}
+
+
+<h2 class="text-center my-4"> {{ title }}</h2>
+
+{% for article in articles %}
+<div class="card mb-3">
+    <img src="{{ url_for('static', filename='img/' + article.image) }}" class="card-img-top" alt="...">
+    <div class="card-body">
+        <h5 class="card-title">{{article.title}}</h5>
+        <p class="card-text">{{article.text | safe}}</p>
+        <p class="card-text">source: {{article.author}}</p>
+        
+        <p class="card-text"><small class="text-body-secondary">{{article.created}}</small></p>
+        <a class="btn btn-primary" href="{{ url_for('admin.update_article_page', article_id=article.id) }}" role="button">
+            <i class="bi bi-pencil-fill"></i>
+            Edit</a>
+        <a class="btn btn-danger" href="{{ url_for('admin.article_delete_page', article_id=article.id) }}" role="button">
+            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7h16" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /><path d="M10 12l4 4m0 -4l-4 4" /></svg>
+            Delete</a>
+    </div>
+
+</div>
+{% endfor %}
+
+{% endblock content %}

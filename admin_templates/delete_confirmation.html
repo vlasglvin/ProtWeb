@@ -1,0 +1,10 @@
+{% extends 'admin-base.html' %}
+
+{% block content %}
+<h2 class="my-4"> Are you sure?</h2>
+<form action="" method="post" class="mb-4">
+    <button type="submit" class="btn btn-danger" >Yes, delete</button>
+    <a class="btn btn-secondary" href="{{ url_for('admin.admin_page') }}">No, cancel</a>
+</form>
+
+{% endblock %}
